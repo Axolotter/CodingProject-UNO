@@ -75,10 +75,16 @@ class player:
         for item in self.hand:
             print(item.view())
 
+    def drawCard(self):
+        self.hand.append(game.deck[0])
+        del game.deck[0]
+
         
 a = game()
 # for v in range (len(a.deck)):
 #     print((a.deck[v]).view())
 
 p1 = player("Jax", 7)
+p1.viewHand()
+p1.drawCard()
 p1.viewHand()
