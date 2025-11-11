@@ -44,6 +44,3 @@ a = game()
 for v in range (len(a.deck)):
     print((a.deck[v]).view())
 
-
-
-print("Test")
