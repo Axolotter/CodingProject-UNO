@@ -11,9 +11,9 @@ class card:
             return(f"{self.color} {self.number}")
         elif self.add == 2:
             return(f"{self.color} +{self.add}")
-        elif wild == True and add == 4:
+        elif self.wild == True and self.add == 4:
             return("Wild Draw 4")
-        elif wild == True and add == 0:
+        elif self.wild == True and self.add == 0:
             return("Wild")
         elif self.reverse == True:
             return(f"{self.color} Reverse")
@@ -40,7 +40,30 @@ class game:
             game.deck.append(card(-1, "Yellow", False, False, False, 2))
             game.deck.append(card(-1, "Blue", False, False, False, 2))
             game.deck.append(card(-1, "Green", False, False, False, 2))
+
+            game.deck.append(card(-1, "Red", True, False, False, 0))
+            game.deck.append(card(-1, "Yellow", True, False, False, 0))
+            game.deck.append(card(-1, "Blue", True, False, False, 0))
+            game.deck.append(card(-1, "Green", True, False, False, 0))
+
+            game.deck.append(card(-1, "Red", False, True, False, 0))
+            game.deck.append(card(-1, "Yellow", False, True, False, 0))
+            game.deck.append(card(-1, "Blue", False, True, False, 0))
+            game.deck.append(card(-1, "Green", False, True, False, 0))
+            
+        game.deck.append(card(-1, "Wild", False, False, True, 0))
+        game.deck.append(card(-1, "Wild", False, False, True, 0))
+        game.deck.append(card(-1, "Wild", False, False, True, 0))
+        game.deck.append(card(-1, "Wild", False, False, True, 0))
+        
+        game.deck.append(card(-1, "Wild", False, False, True, 4))
+        game.deck.append(card(-1, "Wild", False, False, True, 4))
+        game.deck.append(card(-1, "Wild", False, False, True, 4))
+        game.deck.append(card(-1, "Wild", False, False, True, 4))
+            
+        
 a = game()
 for v in range (len(a.deck)):
     print((a.deck[v]).view())
+
 
