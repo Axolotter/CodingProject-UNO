@@ -1,3 +1,4 @@
+import random
 class card:
     def __init__(self, number, color, reverse, skip, wild, add):
         self.number = number
@@ -60,14 +61,20 @@ class game:
         game.deck.append(card(-1, "Wild", False, False, True, 4))
         game.deck.append(card(-1, "Wild", False, False, True, 4))
         game.deck.append(card(-1, "Wild", False, False, True, 4))
-            
+    def shuffle(self):
+        uDeck = game.deck
+        game.deck = []
+        l = len(uDeck)
+        for i in range(l):
+            r = random.randint(0, len(uDeck)-1)
+            game.deck.append(uDeck[r])
+            del uDeck[r]
 
 class hand:
     def __init__(self, player):
         self.player = player
         
 a = game()
+a.shuffle()
 for v in range (len(a.deck)):
     print((a.deck[v]).view())
-
-
