@@ -31,15 +31,15 @@ class game:
                 game.deck.append(card(i, "Blue", False, False, False, 0))
             for i in range(1, 10):
                 game.deck.append(card(i, "Green", False, False, False, 0))
-            game.deck.append(card(0, "Red", False, False, False, 0))
-            game.deck.append(card(0, "Yellow", False, False, False, 0))
-            game.deck.append(card(0, "Blue", False, False, False, 0))
-            game.deck.append(card(0, "Green", False, False, False, 0))
-            for i in range(2):
-                game.deck.append(card(-1, "Red", False, False, False, 2))
-                game.deck.append(card(-1, "Yellow", False, False, False, 2))
-                game.deck.append(card(-1, "Blue", False, False, False, 2))
-                game.deck.append(card(-1, "Green", False, False, False, 2))
+        game.deck.append(card(0, "Red", False, False, False, 0))
+        game.deck.append(card(0, "Yellow", False, False, False, 0))
+        game.deck.append(card(0, "Blue", False, False, False, 0))
+        game.deck.append(card(0, "Green", False, False, False, 0))
+        for i in range(2):
+            game.deck.append(card(-1, "Red", False, False, False, 2))
+            game.deck.append(card(-1, "Yellow", False, False, False, 2))
+            game.deck.append(card(-1, "Blue", False, False, False, 2))
+            game.deck.append(card(-1, "Green", False, False, False, 2))
 a = game()
 for v in range (len(a.deck)):
     print((a.deck[v]).view())
