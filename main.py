@@ -61,6 +61,10 @@ class game:
         game.deck.append(card(-1, "Wild", False, False, True, 4))
         game.deck.append(card(-1, "Wild", False, False, True, 4))
             
+
+class hand:
+    def __init__(self, player):
+        self.player = player
         
 a = game()
 for v in range (len(a.deck)):
