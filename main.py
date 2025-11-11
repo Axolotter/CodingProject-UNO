@@ -70,11 +70,32 @@ class game:
             game.deck.append(uDeck[r])
             del uDeck[r]
 
-class hand:
-    def __init__(self, player):
-        self.player = player
+class player:
+    hand = []
+    def __init__(self, name, startsize):
+        self.name = name
+        self.startsize = startsize
+
+        for i in range(startsize):
+            self.hand.append(game.deck[0])
+            del game.deck[0]
+    def viewHand(self):
+        for item in self.hand:
+            print(item.view())
+
+    def drawCard(self):
+        self.hand.append(game.deck[0])
+        del game.deck[0]
+
         
 a = game()
 a.shuffle()
 for v in range (len(a.deck)):
     print((a.deck[v]).view())
+# for v in range (len(a.deck)):
+#     print((a.deck[v]).view())
+
+p1 = player("Jax", 7)
+p1.viewHand()
+p1.drawCard()
+p1.viewHand()
