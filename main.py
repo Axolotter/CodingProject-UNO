@@ -101,6 +101,24 @@ class game:
         print("")
         print("Your Cards:")
         game.turns[0].viewHand()
+        print(str(len(game.turns[0].hand)+1) + ": " + "Draw a new card")
+        print("")
+        def check(pos):
+            if game.turns[0].hand[pos-1].wild == True:
+                print("")
+                print("What color would you like to make it?")
+                print("\x1b[0;38;2;255;0;0;49m1: Red")
+                print("\x1b[0;38;2;255;255;0;49m2: Yellow")
+                print("\x1b[0;38;2;0;0;255;49m3: Blue")
+                print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
+                n = int(input())
+            elif game.turns[0].hand[pos-1].color == game.activeCard.color or game.turns[0].hand[pos-1].number == game.activeCard.number:
+                print("")
+                print("Same color or number")
+            else:
+                print("")
+                print(f"\x1b[0;38;2;255;0;0;49mA {game.turns[0].hand[pos-1].view()} \x1b[0;38;2;255;0;0;49mcannot be played on a {game.activeCard.view()}")
+        check(int(input("Enter the position of the card you want to play: ")))
 class player:
     def __init__(self, name, startsize):
         self.name = name
@@ -124,7 +142,7 @@ a.shuffle()
 players = int(input("How many players? "))
 for y in range(players):
     name = str(input(f"What is Player {(y+1)}'s Name? "))
-    game.turns.append(player(name, 7))
+    game.turns.append(player(name, 20))
 a.getStart()
 def space():
     for i in range(100):
