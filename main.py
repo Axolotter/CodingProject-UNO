@@ -7,23 +7,33 @@ class card:
         self.skip = skip
         self.wild = wild
         self.add = add
+        if color == "Red":
+            self.code = "\x1b[0;38;2;255;0;0;49m"
+        elif color == "Yellow":
+            self.code = "\x1b[0;38;2;255;255;0;49m"
+        elif color == "Blue":
+            self.code = "\x1b[0;38;2;0;0;255;49m"
+        elif color == "Green":
+            self.code = "\x1b[0;38;2;0;255;0;49m"
+        elif color == "Wild":
+            self.code = "\x1b[0;38;2;114;19;209;49m"
     def view(self):
         if self.number != -1:
-            return(f"{self.color} {self.number}")
+            return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
         elif self.add == 2:
-            return(f"{self.color} +{self.add}")
+            return(self.code + self.color + " Draw " + str(self.add) + "\x1b[0m")
         elif self.wild == True and self.add == 4:
-            return("Wild Draw 4")
+            return(self.code + "Wild Draw 4" + "\x1b[0m")
         elif self.wild == True and self.add == 0:
-            return("Wild")
+            return(self.code + "Wild" + "\x1b[0m")
         elif self.reverse == True:
-            return(f"{self.color} Reverse")
+            return(self.code + self.color + " Reverse" + "\x1b[0m")
         elif self.skip == True:
-            return(f"{self.color} Skip")
+            return(self.code + self.color + " Skip" + "\x1b[0m")
 class game:
     deck = []
     turns = []
-    def __init__(self, players):
+    def __init__(self):
         for x in range(2):
             for i in range(1, 10):
                 game.deck.append(card(i, "Red", False, False, False, 0))
@@ -91,11 +101,11 @@ class player:
             del game.deck[0]
 
         
-a = game(2)
+a = game()
 a.shuffle()
 # for v in range (len(a.deck)):
 #     print((a.deck[v]).view())
 players = int(input("How many players? "))
 for y in range(players):
-    game.turns.append(player(("Player " + str(y)), 7))
+    game.turns.append(player(("Player " + str(y)), 108))
 game.turns[0].viewHand()
