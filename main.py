@@ -89,7 +89,18 @@ class game:
         else:
             game.deck.insert(random.randint(0, len(game.deck)-1), game.deck.pop(0))
             self.getStart()
-
+    def nextPlayer(self):
+        game.turns.insert(-1, game.turns.pop(0))
+    def play(self):
+        space()
+        input(f"{game.turns[0].name}, Press enter to start your turn.")
+        space()
+        print(f"==============={game.turns[0].name}===============")
+        print("")
+        print(f"Top Card: {game.activeCard.view()}")
+        print("")
+        print("Your Cards:")
+        game.turns[0].viewHand()
 class player:
     def __init__(self, name, startsize):
         self.name = name
@@ -99,7 +110,7 @@ class player:
             del game.deck[0]
     def viewHand(self):
         for item in self.hand:
-            print(item.view())
+            print(f"{self.hand.index(item)+1}: {item.view()}")
 
     def drawCard(self, count):
         for i in range(count):    
@@ -115,4 +126,7 @@ for y in range(players):
     name = str(input(f"What is Player {(y+1)}'s Name? "))
     game.turns.append(player(name, 7))
 a.getStart()
-print(game.activeCard.view())
+def space():
+    for i in range(100):
+        print("")
+a.play()
