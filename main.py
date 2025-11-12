@@ -33,6 +33,7 @@ class card:
 class game:
     deck = []
     turns = []
+    activeCard = None
     def __init__(self):
         for x in range(2):
             for i in range(1, 10):
@@ -81,13 +82,18 @@ class game:
             r = random.randint(0, len(uDeck)-1)
             game.deck.append(uDeck[r])
             del uDeck[r]
+    def getStart(self):
+        if game.deck[0].number != -1:
+            game.activeCard = game.deck[0]
+            del game.deck[0]
+        else:
+            game.deck.insert(random.randint(0, len(game.deck)-1), game.deck.pop(0))
+            self.getStart()
 
 class player:
     def __init__(self, name, startsize):
         self.name = name
         self.hand = []
-        self.startsize = startsize
-
         for i in range(startsize):
             self.hand.append(game.deck[0])
             del game.deck[0]
@@ -99,7 +105,6 @@ class player:
         for i in range(count):    
             self.hand.append(game.deck[0])
             del game.deck[0]
-
         
 a = game()
 a.shuffle()
@@ -107,5 +112,7 @@ a.shuffle()
 #     print((a.deck[v]).view())
 players = int(input("How many players? "))
 for y in range(players):
-    game.turns.append(player(("Player " + str(y)), 108))
-game.turns[0].viewHand()
+    name = str(input(f"What is Player {(y+1)}'s Name? "))
+    game.turns.append(player(name, 7))
+a.getStart()
+print(game.activeCard.view())
