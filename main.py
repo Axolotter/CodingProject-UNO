@@ -22,7 +22,8 @@ class card:
             return(f"{self.color} Skip")
 class game:
     deck = []
-    def __init__(self):
+    turns = []
+    def __init__(self, players):
         for x in range(2):
             for i in range(1, 10):
                 game.deck.append(card(i, "Red", False, False, False, 0))
@@ -61,6 +62,7 @@ class game:
         game.deck.append(card(-1, "Wild", False, False, True, 4))
         game.deck.append(card(-1, "Wild", False, False, True, 4))
         game.deck.append(card(-1, "Wild", False, False, True, 4))
+
     def shuffle(self):
         uDeck = game.deck
         game.deck = []
@@ -71,9 +73,9 @@ class game:
             del uDeck[r]
 
 class player:
-    hand = []
     def __init__(self, name, startsize):
         self.name = name
+        self.hand = []
         self.startsize = startsize
 
         for i in range(startsize):
@@ -83,19 +85,17 @@ class player:
         for item in self.hand:
             print(item.view())
 
-    def drawCard(self):
-        self.hand.append(game.deck[0])
-        del game.deck[0]
+    def drawCard(self, count):
+        for i in range(count):    
+            self.hand.append(game.deck[0])
+            del game.deck[0]
 
         
-a = game()
+a = game(2)
 a.shuffle()
-for v in range (len(a.deck)):
-    print((a.deck[v]).view())
 # for v in range (len(a.deck)):
 #     print((a.deck[v]).view())
-
-p1 = player("Jax", 7)
-p1.viewHand()
-p1.drawCard()
-p1.viewHand()
+players = int(input("How many players? "))
+for y in range(players):
+    game.turns.append(player(("Player " + str(y)), 7))
+game.turns[0].viewHand()
