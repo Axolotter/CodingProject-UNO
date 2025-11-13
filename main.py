@@ -124,7 +124,7 @@ class game:
                     game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
                 game.activeCard = game.turns.hand[pos-1]
                 game.turns.insert(-1, game.turns[0].pop)
-                self.play
+                self.play()
             elif game.turns[0].hand[pos-1].color == game.activeCard.color or game.turns[0].hand[pos-1].number == game.activeCard.number:
                 print("")
                 print("Same color or number")
