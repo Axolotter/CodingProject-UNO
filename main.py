@@ -23,9 +23,9 @@ class card:
         elif self.add == 2:
             return(self.code + self.color + " Draw " + str(self.add) + "\x1b[0m")
         elif self.wild == True and self.add == 4:
-            return(self.code + "Wild Draw 4" + "\x1b[0m")
+            return(self.code + self.color + "\x1b[0m")
         elif self.wild == True and self.add == 0:
-            return(self.code + "Wild" + "\x1b[0m")
+            return(self.code + self.color + "\x1b[0m")
         elif self.reverse == True:
             return(self.code + self.color + " Reverse" + "\x1b[0m")
         elif self.skip == True:
@@ -69,10 +69,10 @@ class game:
         game.deck.append(card(-1, "Wild", False, False, True, 0))
         game.deck.append(card(-1, "Wild", False, False, True, 0))
         
-        game.deck.append(card(-1, "Wild", False, False, True, 4))
-        game.deck.append(card(-1, "Wild", False, False, True, 4))
-        game.deck.append(card(-1, "Wild", False, False, True, 4))
-        game.deck.append(card(-1, "Wild", False, False, True, 4))
+        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
+        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
+        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
+        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
 
     def shuffle(self):
         uDeck = game.deck
@@ -89,8 +89,6 @@ class game:
         else:
             game.deck.insert(random.randint(0, len(game.deck)-1), game.deck.pop(0))
             self.getStart()
-    def nextPlayer(self):
-        game.turns.insert(-1, game.turns.pop(0))
     def play(self):
         space()
         input(f"{game.turns[0].name}, Press enter to start your turn.")
@@ -112,6 +110,21 @@ class game:
                 print("\x1b[0;38;2;0;0;255;49m3: Blue")
                 print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
                 n = int(input())
+                if n == 1:
+                    game.turns[0].hand[pos-1].color = ("Wild (Red)")
+                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
+                elif n == 2:
+                    game.turns[0].hand[pos-1].color = ("Wild (Yellow)")
+                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;255;0;49m"
+                elif n == 3:
+                    game.turns[0].hand[pos-1].color = ("Wild (Blue)")
+                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;0;255;49m"
+                elif n == 4:
+                    game.turns[0].hand[pos-1].color = ("Wild (Green)")
+                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
+                game.activeCard = game.turns.hand[pos-1]
+                game.turns.insert(-1, game.turns[0].pop)
+                self.play
             elif game.turns[0].hand[pos-1].color == game.activeCard.color or game.turns[0].hand[pos-1].number == game.activeCard.number:
                 print("")
                 print("Same color or number")
@@ -137,8 +150,6 @@ class player:
         
 a = game()
 a.shuffle()
-# for v in range (len(a.deck)):
-#     print((a.deck[v]).view())
 players = int(input("How many players? "))
 for y in range(players):
     name = str(input(f"What is Player {(y+1)}'s Name? "))
