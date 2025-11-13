@@ -1,11 +1,10 @@
 import random
 class card:
-    def __init__(self, number, color, reverse, skip, wild, add):
+    def __init__(self, number, color, reverse, skip, add):
         self.number = number
         self.color = color
         self.reverse = reverse
         self.skip = skip
-        self.wild = wild
         self.add = add
         if color == "Red":
             self.code = "\x1b[0;38;2;255;0;0;49m"
@@ -15,8 +14,7 @@ class card:
             self.code = "\x1b[0;38;2;0;0;255;49m"
         elif color == "Green":
             self.code = "\x1b[0;38;2;0;255;0;49m"
-        elif color == "Wild" or color == "Wild Draw 4":
-            self.code = "\x1b[0;38;2;114;19;209;49m"
+        
     def view(self):
         if self.number != -1:
             return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
@@ -24,12 +22,45 @@ class card:
             return(self.code + self.color + " Draw " + str(self.add) + "\x1b[0m")
         elif self.wild == True and self.add == 4:
             return(self.code + self.color + "\x1b[0m")
-        elif self.wild == True and self.add == 0:
+        elif isinstance(self, wild):
             return(self.code + self.color + "\x1b[0m")
         elif self.reverse == True:
             return(self.code + self.color + " Reverse" + "\x1b[0m")
         elif self.skip == True:
             return(self.code + self.color + " Skip" + "\x1b[0m")
+        
+class wild(card):
+    def __init__(self, number, color, add):
+        super().__init__(number, color, add)
+        self.code = self.code = "\x1b[0;38;2;114;19;209;49m"
+    def playWild(self, pos):
+        print("")
+        print("What color would you like to make it?")
+        print("\x1b[0;38;2;255;0;0;49m1: Red")
+        print("\x1b[0;38;2;255;255;0;49m2: Yellow")
+        print("\x1b[0;38;2;0;0;255;49m3: Blue")
+        print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
+        n = int(input())
+        if n == 1:
+            game.turns[0].hand[pos-1].color = ("Red")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
+        elif n == 2:
+            game.turns[0].hand[pos-1].color = ("Yellow")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;255;0;49m"
+        elif n == 3:
+            game.turns[0].hand[pos-1].color = ("Blue")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;0;255;49m"
+        elif n == 4:
+            game.turns[0].hand[pos-1].color = ("Green")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
+        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns.insert(-1, game.turns.pop(0))
+
+
+
+#elif color == "Wild" or color == "Wild Draw 4":
+            #self.code = "\x1b[0;38;2;114;19;209;49m"
+
 class game:
     deck = []
     turns = []
@@ -102,28 +133,8 @@ class game:
         print(str(len(game.turns[0].hand)+1) + ": " + "Draw a new card")
         print("")
         def check(pos):
-            if game.turns[0].hand[pos-1].wild == True:
-                print("")
-                print("What color would you like to make it?")
-                print("\x1b[0;38;2;255;0;0;49m1: Red")
-                print("\x1b[0;38;2;255;255;0;49m2: Yellow")
-                print("\x1b[0;38;2;0;0;255;49m3: Blue")
-                print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
-                n = int(input())
-                if n == 1:
-                    game.turns[0].hand[pos-1].color = ("Red")
-                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
-                elif n == 2:
-                    game.turns[0].hand[pos-1].color = ("Yellow")
-                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;255;0;49m"
-                elif n == 3:
-                    game.turns[0].hand[pos-1].color = ("Blue")
-                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;0;255;49m"
-                elif n == 4:
-                    game.turns[0].hand[pos-1].color = ("Green")
-                    game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
-                game.activeCard = game.turns[0].hand[pos-1]
-                game.turns.insert(-1, game.turns.pop(0))
+            if isinstance(game.turns[0].hand[pos-1], wild):
+                game.turns[0].hand[pos-1].playWild(pos)
                 self.play()
                 return True
             elif game.turns[0].hand[pos-1].color == game.activeCard.color or game.turns[0].hand[pos-1].number == game.activeCard.number:
