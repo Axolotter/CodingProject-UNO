@@ -15,7 +15,7 @@ class card:
             self.code = "\x1b[0;38;2;0;0;255;49m"
         elif color == "Green":
             self.code = "\x1b[0;38;2;0;255;0;49m"
-        elif color == "Wild":
+        elif color == "Wild" or color == "Wild Draw 4":
             self.code = "\x1b[0;38;2;114;19;209;49m"
     def view(self):
         if self.number != -1:
@@ -111,27 +111,34 @@ class game:
                 print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
                 n = int(input())
                 if n == 1:
-                    game.turns[0].hand[pos-1].color = ("Wild (Red)")
+                    game.turns[0].hand[pos-1].color = ("Red")
                     game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
                 elif n == 2:
-                    game.turns[0].hand[pos-1].color = ("Wild (Yellow)")
+                    game.turns[0].hand[pos-1].color = ("Yellow")
                     game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;255;0;49m"
                 elif n == 3:
-                    game.turns[0].hand[pos-1].color = ("Wild (Blue)")
+                    game.turns[0].hand[pos-1].color = ("Blue")
                     game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;0;255;49m"
                 elif n == 4:
-                    game.turns[0].hand[pos-1].color = ("Wild (Green)")
+                    game.turns[0].hand[pos-1].color = ("Green")
                     game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
-                game.activeCard = game.turns.hand[pos-1]
-                game.turns.insert(-1, game.turns[0].pop)
+                game.activeCard = game.turns[0].hand[pos-1]
+                game.turns.insert(-1, game.turns.pop(0))
                 self.play()
+                return True
             elif game.turns[0].hand[pos-1].color == game.activeCard.color or game.turns[0].hand[pos-1].number == game.activeCard.number:
                 print("")
                 print("Same color or number")
+                return True
             else:
                 print("")
                 print(f"\x1b[0;38;2;255;0;0;49mA {game.turns[0].hand[pos-1].view()} \x1b[0;38;2;255;0;0;49mcannot be played on a {game.activeCard.view()}")
-        check(int(input("Enter the position of the card you want to play: ")))
+                return False
+        
+        cardPlay = check(int(input("Enter the position of the card you want to play: ")))
+        while(cardPlay == False):
+            cardPlay = check(int(input("Enter the position of the card you want to play: ")))
+        print("Turn over")
 class player:
     def __init__(self, name, startsize):
         self.name = name
