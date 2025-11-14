@@ -1,10 +1,8 @@
 import random
 class card:
-    def __init__(self, number, color, reverse, skip, add):
+    def __init__(self, number, color, add):
         self.number = number
         self.color = color
-        self.reverse = reverse
-        self.skip = skip
         self.add = add
         if color == "Red":
             self.code = "\x1b[0;38;2;255;0;0;49m"
@@ -20,20 +18,20 @@ class card:
             return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
         elif self.add == 2:
             return(self.code + self.color + " Draw " + str(self.add) + "\x1b[0m")
-        elif self.wild == True and self.add == 4:
-            return(self.code + self.color + "\x1b[0m")
+        # elif self.wild == True and self.add == 4:
+        #     return(self.code + self.color + "\x1b[0m")
         elif isinstance(self, wild):
             return(self.code + self.color + "\x1b[0m")
-        elif self.reverse == True:
-            return(self.code + self.color + " Reverse" + "\x1b[0m")
-        elif self.skip == True:
-            return(self.code + self.color + " Skip" + "\x1b[0m")
+        # elif self.reverse == True:
+        #     return(self.code + self.color + " Reverse" + "\x1b[0m")
+        # elif self.skip == True:
+        #     return(self.code + self.color + " Skip" + "\x1b[0m")
         
 class wild(card):
     def __init__(self, number, color, add):
         super().__init__(number, color, add)
-        self.code = self.code = "\x1b[0;38;2;114;19;209;49m"
-    def playWild(self, pos):
+        self.code = "\x1b[0;38;2;114;19;209;49m"
+    def play(self, pos):
         print("")
         print("What color would you like to make it?")
         print("\x1b[0;38;2;255;0;0;49m1: Red")
@@ -68,42 +66,42 @@ class game:
     def __init__(self):
         for x in range(2):
             for i in range(1, 10):
-                game.deck.append(card(i, "Red", False, False, False, 0))
+                game.deck.append(card(i, "Red", 0))
             for i in range(1, 10):
-                game.deck.append(card(i, "Yellow", False, False, False, 0))
+                game.deck.append(card(i, "Yellow", 0))
             for i in range(1, 10):
-                game.deck.append(card(i, "Blue", False, False, False, 0))
+                game.deck.append(card(i, "Blue", 0))
             for i in range(1, 10):
-                game.deck.append(card(i, "Green", False, False, False, 0))
-        game.deck.append(card(0, "Red", False, False, False, 0))
-        game.deck.append(card(0, "Yellow", False, False, False, 0))
-        game.deck.append(card(0, "Blue", False, False, False, 0))
-        game.deck.append(card(0, "Green", False, False, False, 0))
+                game.deck.append(card(i, "Green", 0))
+        game.deck.append(card(0, "Red", 0))
+        game.deck.append(card(0, "Yellow", 0))
+        game.deck.append(card(0, "Blue", 0))
+        game.deck.append(card(0, "Green", 0))
         for i in range(2):
-            game.deck.append(card(-1, "Red", False, False, False, 2))
-            game.deck.append(card(-1, "Yellow", False, False, False, 2))
-            game.deck.append(card(-1, "Blue", False, False, False, 2))
-            game.deck.append(card(-1, "Green", False, False, False, 2))
+            game.deck.append(card(-1, "Red", 2))
+            game.deck.append(card(-1, "Yellow", 2))
+            game.deck.append(card(-1, "Blue", 2))
+            game.deck.append(card(-1, "Green", 2))
 
-            game.deck.append(card(-1, "Red", True, False, False, 0))
-            game.deck.append(card(-1, "Yellow", True, False, False, 0))
-            game.deck.append(card(-1, "Blue", True, False, False, 0))
-            game.deck.append(card(-1, "Green", True, False, False, 0))
+            game.deck.append(card(-1, "Red", 0))
+            game.deck.append(card(-1, "Yellow", 0))
+            game.deck.append(card(-1, "Blue", 0))
+            game.deck.append(card(-1, "Green", 0))
 
-            game.deck.append(card(-1, "Red", False, True, False, 0))
-            game.deck.append(card(-1, "Yellow", False, True, False, 0))
-            game.deck.append(card(-1, "Blue", False, True, False, 0))
-            game.deck.append(card(-1, "Green", False, True, False, 0))
+            game.deck.append(wild(-1, "Red", 0))
+            game.deck.append(wild(-1, "Yellow", 0))
+            game.deck.append(wild(-1, "Blue", 0))
+            game.deck.append(wild(-1, "Green", 0))
             
-        game.deck.append(card(-1, "Wild", False, False, True, 0))
-        game.deck.append(card(-1, "Wild", False, False, True, 0))
-        game.deck.append(card(-1, "Wild", False, False, True, 0))
-        game.deck.append(card(-1, "Wild", False, False, True, 0))
+        game.deck.append(card(-1, "Wild", 0))
+        game.deck.append(card(-1, "Wild", 0))
+        game.deck.append(card(-1, "Wild", 0))
+        game.deck.append(card(-1, "Wild", 0))
         
-        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
-        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
-        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
-        game.deck.append(card(-1, "Wild Draw 4", False, False, True, 4))
+        game.deck.append(card(-1, "Wild Draw 4", 4))
+        game.deck.append(card(-1, "Wild Draw 4", 4))
+        game.deck.append(card(-1, "Wild Draw 4", 4))
+        game.deck.append(card(-1, "Wild Draw 4", 4))
 
     def shuffle(self):
         uDeck = game.deck
