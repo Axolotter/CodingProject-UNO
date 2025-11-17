@@ -11,7 +11,6 @@ class card:
             self.code = "\x1b[0;38;2;0;0;255;49m"
         elif color == "Green":
             self.code = "\x1b[0;38;2;0;255;0;49m"
-        
     def view(self):
         return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
         
@@ -50,7 +49,31 @@ class draw4(card):
         self.code = "\x1b[0;38;2;114;19;209;49m"
     def view(self):
         return(self.code + self.color + "\x1b[0m")
-
+    def play(self, pos):
+        print("")
+        print("What color would you like to make it?")
+        print("\x1b[0;38;2;255;0;0;49m1: Red")
+        print("\x1b[0;38;2;255;255;0;49m2: Yellow")
+        print("\x1b[0;38;2;0;0;255;49m3: Blue")
+        print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
+        n = int(input())
+        if n == 1:
+            game.turns[0].hand[pos-1].color = ("Red")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
+        elif n == 2:
+            game.turns[0].hand[pos-1].color = ("Yellow")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;255;0;49m"
+        elif n == 3:
+            game.turns[0].hand[pos-1].color = ("Blue")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;0;255;49m"
+        elif n == 4:
+            game.turns[0].hand[pos-1].color = ("Green")
+            game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
+        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns.append(game.turns.pop(0))
+        
+        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns.append(game.turns.pop(0)) 
 class skip(card):
     def __init__(self, number, color):
         super().__init__(number, color)
