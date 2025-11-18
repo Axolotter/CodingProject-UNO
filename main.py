@@ -13,6 +13,9 @@ class card:
             self.code = "\x1b[0;38;2;0;255;0;49m"
     def view(self):
         return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
+    def play(self, pos):
+        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns.append(game.turns.pop(0))        
         
 class wild(card):
     def __init__(self, number, color):
@@ -71,14 +74,21 @@ class draw4(card):
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
         game.activeCard = game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
-        
-        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns[0].drawCard(4)
+        space()
+        input(f"{game.turns[0].name}, you drew 4 cards. Press enter to move to the next player.")
         game.turns.append(game.turns.pop(0)) 
 class skip(card):
     def __init__(self, number, color):
         super().__init__(number, color)
     def view(self):
         return(self.code + self.color + " Skip" + "\x1b[0m")
+    def play(self, pos):
+        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns.append(game.turns.pop(0))
+        space()
+        input(f"{game.turns[0].name}, your turn was skipped. Press enter to move to the next player.")
+        game.turns.append(game.turns.pop(0)) 
     
 class reverse(card):
     def __init__(self, number, color):
@@ -91,7 +101,13 @@ class draw2(card):
         super().__init__(number, color)
     def view(self):
         return(self.code + self.color + " Draw 2" + "\x1b[0m")
-
+    def play(self, pos):
+        game.activeCard = game.turns[0].hand[pos-1]
+        game.turns.append(game.turns.pop(0))
+        game.turns[0].drawCard(2)
+        space()
+        input(f"{game.turns[0].name}, you drew 2 cards. Press enter to move to the next player.")
+        game.turns.append(game.turns.pop(0)) 
 class game:
     deck = []
     turns = []
@@ -153,8 +169,6 @@ class game:
             self.getStart()
     def play(self):
         space()
-        for i in range(0, len(game.turns)):
-            print(game.turns[i].name)
         input(f"{game.turns[0].name}, Press enter to start your turn.")
         space()
         print(f"==============={game.turns[0].name}===============")
@@ -166,7 +180,7 @@ class game:
         print(str(len(game.turns[0].hand)+1) + ": " + "Draw a new card")
         print("")
         def check(pos):
-            if isinstance(game.turns[0].hand[pos-1], wild):
+            if isinstance(game.turns[0].hand[pos-1], wild) or isinstance(game.turns[0].hand[pos-1], draw4):
                 game.turns[0].hand[pos-1].play(pos)
                 self.play()
                 return True
