@@ -15,6 +15,7 @@ class card:
         return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
+        del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))        
         
 class wild(card):
@@ -44,6 +45,7 @@ class wild(card):
             game.turns[0].hand[pos-1].color = ("Green")
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
         game.activeCard = game.turns[0].hand[pos-1]
+        del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
 
 class draw4(card):
@@ -73,6 +75,7 @@ class draw4(card):
             game.turns[0].hand[pos-1].color = ("Green")
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
         game.activeCard = game.turns[0].hand[pos-1]
+        del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
         game.turns[0].drawCard(4)
         space()
@@ -85,6 +88,7 @@ class skip(card):
         return(self.code + self.color + " Skip" + "\x1b[0m")
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
+        del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
         space()
         input(f"{game.turns[0].name}, your turn was skipped. Press enter to move to the next player.")
@@ -95,7 +99,10 @@ class reverse(card):
         super().__init__(number, color)
     def view(self):
         return(self.code + self.color + " Reverse" + "\x1b[0m")
-
+    def play(self, pos):
+        game.activeCard = game.turns[0].hand[pos-1]
+        del game.turns[0].hand[pos-1]
+        game.turns.reverse()
 class draw2(card):
     def __init__(self, number, color):
         super().__init__(number, color)
@@ -103,6 +110,7 @@ class draw2(card):
         return(self.code + self.color + " Draw 2" + "\x1b[0m")
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
+        del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
         game.turns[0].drawCard(2)
         space()
@@ -180,13 +188,16 @@ class game:
         print(str(len(game.turns[0].hand)+1) + ": " + "Draw a new card")
         print("")
         def check(pos):
-            if isinstance(game.turns[0].hand[pos-1], wild) or isinstance(game.turns[0].hand[pos-1], draw4):
+            if pos == (len(game.turns[0].hand)+1):
+                game.turns[0].drawCard(1)
+                self.play()
+            elif isinstance(game.turns[0].hand[pos-1], wild) or isinstance(game.turns[0].hand[pos-1], draw4):
                 game.turns[0].hand[pos-1].play(pos)
                 self.play()
                 return True
             elif game.turns[0].hand[pos-1].color == game.activeCard.color or game.turns[0].hand[pos-1].number == game.activeCard.number:
-                print("")
-                print("Same color or number")
+                game.turns[0].hand[pos-1].play(pos)
+                self.play()
                 return True
             else:
                 print("")
@@ -196,7 +207,6 @@ class game:
         cardPlay = check(int(input("Enter the position of the card you want to play: ")))
         while(cardPlay == False):
             cardPlay = check(int(input("Enter the position of the card you want to play: ")))
-        print("Turn over")
 class player:
     def __init__(self, name, startsize):
         self.name = name
@@ -218,7 +228,7 @@ a.shuffle()
 players = int(input("How many players? "))
 for y in range(players):
     name = str(input(f"What is Player {(y+1)}'s Name? "))
-    game.turns.append(player(name, 40))
+    game.turns.append(player(name, 7))
 a.getStart()
 def space():
     for i in range(100):
