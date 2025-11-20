@@ -201,7 +201,7 @@ class game:
             print(f"Game over! {game.turns[1].name} won!")
             return True
         
-        if(len(game.deck == 0)):
+        if(len(game.deck)==0):
             game.deck.append(game.discard)
             game.discard = []
             game.shuffle()
