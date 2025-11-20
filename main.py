@@ -31,7 +31,15 @@ class wild(card):
         print("\x1b[0;38;2;255;255;0;49m2: Yellow")
         print("\x1b[0;38;2;0;0;255;49m3: Blue")
         print("\x1b[0;38;2;0;255;0;49m4: Green\x1b[0m")
-        n = int(input())
+        while True:
+            try: 
+                n = int(input())
+                while n > 5 or n < 0:
+                    print("Enter a valid number.")
+                    n = int(input())
+                break
+            except:
+                print("Enter a valid number.")
         if n == 1:
             game.turns[0].hand[pos-1].color = ("Red")
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
