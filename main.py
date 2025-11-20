@@ -264,7 +264,7 @@ a.shuffle()
 while True:
     try: 
         players = int(input("How many players? "))
-        while players < 1 or players > 5:
+        while players < 2 or players > 5:
             print("Enter a valid number.")
             players = int(input("How many players? "))
         break
