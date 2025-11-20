@@ -35,7 +35,7 @@ class wild(card):
         while True:
             try: 
                 n = int(input())
-                while n > 5 or n < 0:
+                while n > 4 or n < 0:
                     print("Enter a valid number.")
                     n = int(input())
                 break
