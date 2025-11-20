@@ -100,9 +100,13 @@ class reverse(card):
     def view(self):
         return(self.code + self.color + " Reverse" + "\x1b[0m")
     def play(self, pos):
-        game.activeCard = game.turns[0].hand[pos-1]
-        del game.turns[0].hand[pos-1]
-        game.turns.reverse()
+        if len(game.turns) == 2:
+            game.activeCard = game.turns[0].hand[pos-1]
+            del game.turns[0].hand[pos-1]
+        else:
+            game.activeCard = game.turns[0].hand[pos-1]
+            del game.turns[0].hand[pos-1]
+            game.turns.reverse()
 class draw2(card):
     def __init__(self, number, color):
         super().__init__(number, color)
@@ -176,6 +180,11 @@ class game:
             game.deck.insert(random.randint(0, len(game.deck)-1), game.deck.pop(0))
             self.getStart()
     def play(self):
+        if(len(game.turns[1].hand) == 0):
+            print("=============================================")
+            print(f"Game over! {game.turns[1].name} won!")
+            return True
+        
         space()
         input(f"{game.turns[0].name}, Press enter to start your turn.")
         space()
@@ -204,9 +213,15 @@ class game:
                 print(f"\x1b[0;38;2;255;0;0;49mA {game.turns[0].hand[pos-1].view()} \x1b[0;38;2;255;0;0;49mcannot be played on a {game.activeCard.view()}")
                 return False
         
-        cardPlay = check(int(input("Enter the position of the card you want to play: ")))
-        while(cardPlay == False):
-            cardPlay = check(int(input("Enter the position of the card you want to play: ")))
+        while True:
+            try: 
+                cardPlay = check(int(input("Enter the position of the card you want to play: ")))
+                while cardPlay == False:
+                    cardPlay = check(int(input("Enter the position of the card you want to play: ")))
+                break
+            except:
+                print("Enter a valid number.")
+        
 class player:
     def __init__(self, name, startsize):
         self.name = name
@@ -225,7 +240,13 @@ class player:
         
 a = game()
 a.shuffle()
-players = int(input("How many players? "))
+while True:
+    try: 
+        players = int(input("How many players? "))
+        break
+    except:
+        print("Enter a valid number.")
+
 for y in range(players):
     name = str(input(f"What is Player {(y+1)}'s Name? "))
     game.turns.append(player(name, 7))
