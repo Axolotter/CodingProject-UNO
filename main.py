@@ -35,7 +35,7 @@ class wild(card):
         while True:
             try: 
                 n = int(input())
-                while n > 4 or n < 0:
+                while n > 5 or n < 0:
                     print("Enter a valid number.")
                     n = int(input())
                 break
@@ -201,7 +201,7 @@ class game:
             print(f"Game over! {game.turns[1].name} won!")
             return True
         
-        if(len(game.deck) == 0):
+        if(len(game.deck == 0)):
             game.deck.append(game.discard)
             game.discard = []
             game.shuffle()
@@ -218,9 +218,12 @@ class game:
         print(str(len(game.turns[0].hand)+1) + ": " + "Draw a new card")
         print("")
         def check(pos):
-            if pos == (len(game.turns[0].hand)+1):
+            if pos < 0:
+                return False
+            elif pos == (len(game.turns[0].hand)+1):
                 game.turns[0].drawCard(1)
                 self.play()
+                return True
             elif isinstance(game.turns[0].hand[pos-1], wild) or isinstance(game.turns[0].hand[pos-1], draw4):
                 game.turns[0].hand[pos-1].play(pos)
                 self.play()
@@ -233,7 +236,6 @@ class game:
                 print("")
                 print(f"\x1b[0;38;2;255;0;0;49mA {game.turns[0].hand[pos-1].view()} \x1b[0;38;2;255;0;0;49mcannot be played on a {game.activeCard.view()}")
                 return False
-        
         while True:
             try: 
                 cardPlay = check(int(input("Enter the position of the card you want to play: ")))
