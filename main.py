@@ -15,6 +15,7 @@ class card:
         return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
+        game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))        
         
@@ -53,6 +54,7 @@ class wild(card):
             game.turns[0].hand[pos-1].color = ("Green")
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
         game.activeCard = game.turns[0].hand[pos-1]
+        game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
 
@@ -83,6 +85,7 @@ class draw4(card):
             game.turns[0].hand[pos-1].color = ("Green")
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;0;255;0;49m"
         game.activeCard = game.turns[0].hand[pos-1]
+        game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
         game.turns[0].drawCard(4)
@@ -96,6 +99,7 @@ class skip(card):
         return(self.code + self.color + " Skip" + "\x1b[0m")
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
+        game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
         space()
@@ -110,9 +114,11 @@ class reverse(card):
     def play(self, pos):
         if len(game.turns) == 2:
             game.activeCard = game.turns[0].hand[pos-1]
+            game.discard.append(game.turns[0].hand[pos-1])
             del game.turns[0].hand[pos-1]
         else:
             game.activeCard = game.turns[0].hand[pos-1]
+            game.discard.append(game.turns[0].hand[pos-1])
             del game.turns[0].hand[pos-1]
             game.turns.reverse()
 class draw2(card):
@@ -122,6 +128,7 @@ class draw2(card):
         return(self.code + self.color + " Draw 2" + "\x1b[0m")
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
+        game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
         game.turns[0].drawCard(2)
@@ -130,6 +137,7 @@ class draw2(card):
         game.turns.append(game.turns.pop(0)) 
 class game:
     deck = []
+    discard = []
     turns = []
     activeCard = None
     def __init__(self):
@@ -193,6 +201,11 @@ class game:
             print(f"Game over! {game.turns[1].name} won!")
             return True
         
+        if(len(game.deck == 0)):
+            game.deck.append(game.discard)
+            game.discard = []
+            game.shuffle()
+        
         space()
         input(f"{game.turns[0].name}, Press enter to start your turn.")
         space()
@@ -251,6 +264,9 @@ a.shuffle()
 while True:
     try: 
         players = int(input("How many players? "))
+        while players < 1 or players > 5:
+            print("Enter a valid number.")
+            players = int(input("How many players? "))
         break
     except:
         print("Enter a valid number.")
