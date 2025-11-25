@@ -1,8 +1,10 @@
 import random
 class card:
+    #standard card class
     def __init__(self, number, color):
         self.number = number
         self.color = color
+        #colors!!!
         if color == "Red":
             self.code = "\x1b[0;38;2;255;0;0;49m"
         elif color == "Yellow":
@@ -11,8 +13,10 @@ class card:
             self.code = "\x1b[0;38;2;0;0;255;49m"
         elif color == "Green":
             self.code = "\x1b[0;38;2;0;255;0;49m"
+    #show the card in the hand
     def view(self):
         return(self.code + self.color + " " + str(self.number) + "\x1b[0m")
+    #play function for standard card only
     def play(self, pos):
         game.activeCard = game.turns[0].hand[pos-1]
         game.discard.append(game.turns[0].hand[pos-1])
@@ -20,11 +24,13 @@ class card:
         game.turns.append(game.turns.pop(0))        
         
 class wild(card):
+    #wild card, inherits from standard
     def __init__(self, number, color):
         super().__init__(number, color)
         self.code = "\x1b[0;38;2;114;19;209;49m"
     def view(self):
         return(self.code + self.color + "\x1b[0m")
+    #has its own play function
     def play(self, pos):
         print("")
         print("What color would you like to make it?")
@@ -41,6 +47,8 @@ class wild(card):
                 break
             except:
                 print("Enter a valid number.")
+
+        #player chooses color
         if n == 1:
             game.turns[0].hand[pos-1].color = ("Red")
             game.turns[0].hand[pos-1].code = "\x1b[0;38;2;255;0;0;49m"
@@ -59,6 +67,7 @@ class wild(card):
         game.turns.append(game.turns.pop(0))
 
 class draw4(card):
+    # draw 4 wild
     def __init__(self, number, color):
         super().__init__(number, color)
         self.code = "\x1b[0;38;2;114;19;209;49m"
@@ -96,6 +105,7 @@ class draw4(card):
         game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
+        #forces the other player to draw 4 and skips their turn
         game.turns[0].drawCard(4)
         space()
         input(f"{game.turns[0].name}, you drew 4 cards. Press enter to move to the next player.")
@@ -110,6 +120,7 @@ class skip(card):
         game.discard.append(game.turns[0].hand[pos-1])
         del game.turns[0].hand[pos-1]
         game.turns.append(game.turns.pop(0))
+        #skips player's turn
         space()
         input(f"{game.turns[0].name}, your turn was skipped. Press enter to move to the next player.")
         game.turns.append(game.turns.pop(0)) 
@@ -120,6 +131,7 @@ class reverse(card):
     def view(self):
         return(self.code + self.color + " Reverse" + "\x1b[0m")
     def play(self, pos):
+        #if two players, reversing the list doesn't work
         if len(game.turns) == 2:
             game.activeCard = game.turns[0].hand[pos-1]
             game.discard.append(game.turns[0].hand[pos-1])
@@ -149,6 +161,7 @@ class game:
     turns = []
     activeCard = None
     def __init__(self):
+        #create deck list with same cards in a standard uno deck
         for x in range(2):
             for i in range(1, 10):
                 game.deck.append(card(i, "Red"))
@@ -189,6 +202,7 @@ class game:
         game.deck.append(draw4(-1, "Wild Draw 4"))
 
     def shuffle(self):
+        #shuffles the deck into a random order
         uDeck = game.deck
         game.deck = []
         l = len(uDeck)
@@ -244,6 +258,7 @@ class game:
                 print("")
                 print(f"\x1b[0;38;2;255;0;0;49mA {game.turns[0].hand[pos-1].view()} \x1b[0;38;2;255;0;0;49mcannot be played on a {game.activeCard.view()}")
                 return False
+        #uses check method to test for viable inputs with error handling
         while True:
             try: 
                 cardPlay = check(int(input("Enter the position of the card you want to play: ")))
@@ -258,6 +273,7 @@ class player:
         self.name = name
         self.hand = []
         for i in range(startsize):
+            #draws cards from deck
             self.hand.append(game.deck[0])
             del game.deck[0]
     def viewHand(self):
@@ -288,4 +304,6 @@ a.getStart()
 def space():
     for i in range(100):
         print("")
+
+#Actual game play!!!!
 a.play()
